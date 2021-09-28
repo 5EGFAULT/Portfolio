@@ -28,7 +28,6 @@ setTextAnimation(0.1, 3.3, 2, 'ease-in-out', '#4cab8b', true);
 // setTextAnimation(0.1, 3.3, 2, 'ease-in-out', '#525f7f', true);
 
 
-
 function rubberletters(classname, delay) {
     let letters = document.querySelectorAll(".titleletter");
     letters.forEach(

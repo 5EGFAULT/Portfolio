@@ -1,8 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Koh+Santepheap:wght@700&display=swap');
 :root {
     --main-color: #4cab8b;
     /* --main-color: #b49e48 ; */
     /* --main-color: yellow; */
 }
+
 
 .navbar {
     padding-top: 0;
@@ -24,7 +27,7 @@
 
 .nav-link:hover {
     /* color: black;
-     */
+     */   
     color: var(--main-color);
 
 }
@@ -143,7 +146,7 @@
 
 .part {
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
 
 }
 
@@ -169,12 +172,20 @@
     font-weight: 900;
 }
 
+.subtitle {
+    font-size: 35px;
+    font-family: 'Dancing Script', cursive;
+}
+
 .home .icons a {
     font-size: 30px;
     line-height: 1.42857143;
     color: inherit;
     margin: 0 5px;
 }
+
+
+
 
 .home .icons {
     text-align: center;
@@ -262,4 +273,10 @@
     .home .title {
         font-size: 2rem;
     }
+}
+.part-title{
+    font-size: 24px;
+     padding-left: 1.5rem;
+     font-family: 'Koh Santepheap', cursive;    padding-top: 1rem;
+   color:#4cab8b;
 }
