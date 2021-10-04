@@ -9,6 +9,7 @@ dropdownsnav.forEach(element => {
     })
 });
 
+// first index of array
 
 function setTextAnimation(delay, duration, strokeWidth, timingFunction, strokeColor, repeat) {
     let paths = document.querySelectorAll(".logo path");
