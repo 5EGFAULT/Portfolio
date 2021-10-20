@@ -1,97 +1,53 @@
-import NavItem from "./NavItem";
+import { motion, useCycle } from "framer-motion";
 import "./NavBar.css";
-import { useEffect, useRef, useState } from "react";
-import { svgCurve } from "../../util/NavCurving";
+import ToggleNav from "./ToggleNav";
+import { useRef } from "react";
+import { useDimensions } from "../../util/useDimensions";
+import Menu from "./Menu";
+
+const sidebar = {
+  open: (height = 1000) => ({
+    clipPath:
+      height > 3000
+        ? `circle(${height * 2 + 200}px at 280px 280px)`
+        : `Path("m 1283.944,2292.1293 c 163.0569,103.9512 306.5279,313.9631 452.9328,0 215.9406,-163.9085 215.9406,-584.0332 0,-747.9416 -146.4049,-111.1311 -306.5267,-111.1311 -452.9328,0 -215.9401,163.9084 -163.055,643.9904 0,747.9416 z M 952.57647,-568.11249 c -185.52074,0 -376.53389,50.91049 -787.44406,59.78818 -436.39863,-134.60891 -824.39261,118.54899 -838.75547,444.32833 -13.83698,313.85104 -91.43401,451.04397 -62.5122,867.84892 -163.67362,405.66306 163.05586,466.51286 163.05586,791.04296 0,324.5305 -317.05281,253.5393 -217.40782,638.9196 99.6453,385.3791 471.05014,212.9727 636.8217,476.6538 232.809312,192.6902 0,495.2739 341.51374,659.2021 401.42463,192.6902 380.46375,-192.6892 742.80794,-91.2739 235.52584,0 235.52584,405.6629 706.57574,283.9641 425.575,-109.9551 235.5265,-425.9465 552.577,-578.0695 280.8189,-202.8313 461.9923,70.9903 797.1617,-334.6726 317.2362,-383.9599 -135.8789,-588.2114 -108.703,-1054.7236 72.4683,-436.0876 443.8738,-689.62759 172.1145,-1216.98943 -235.5247,-344.81378 -272.9782,-646.28708 -707.7939,-707.13612 -371.4036,-152.12378 -352.0685,-124.47319 -759.7069,-195.46431 -434.8164,-121.69896 -277.017,-43.41853 -630.30483,-43.41853 z M 867.246,1087.817 c -147.16669,-247.15028 -532.23114,-247.15028 -679.39778,0 -98.11727,164.7602 -98.11727,342.3189 0,507.0789 147.16664,247.1497 532.23109,247.1497 679.39778,0 98.12355,-164.76 98.12355,-342.3187 0,-507.0789 z")`,
+
+    transition: {
+      type: "spring",
+      stiffness: 20,
+      restDelta: 2,
+    },
+  }),
+  closed: {
+    clipPath:
+      window.innerHeight > 3000
+        ? "circle(30px at 40px 40px)"
+        : `path("m 41.917388,52.381468 c 2.5745,1.617855 4.83976,4.886396 7.15134,0 3.40948,-2.551006 3.40948,-9.089658 0,-11.640662 -2.31158,-1.729598 -4.83974,-1.729598 -7.15134,0 -3.40947,2.551004 -2.57447,10.022806 0,11.640662 z M 36.339338,11.69835 c -2.92918,0 -6.74055,-4.5575174 -11.72817,-2.3675804 -5.392148,2.3675804 -4.13775,6.7973554 -6.29319,10.5752394 -2.431455,4.261666 -5.887811,3.430133 -8.295553,9.312524 -2.584238,6.313575 2.574483,7.260618 2.574483,12.311476 0,5.050861 -5.005936,3.945982 -3.432645,9.943886 1.573297,5.997887 7.437395,3.314622 10.054757,7.418451 3.675818,2.99895 0,7.708244 5.392148,10.259554 6.33808,2.998953 6.00713,-2.998937 11.72817,-1.420548 3.71871,0 3.71871,6.313572 11.1561,4.419501 6.71939,-1.711298 3.71872,-6.62926 8.72462,-8.99684 4.43384,-3.156787 7.29438,1.104865 12.58636,-5.208709 5.00883,-5.975799 -2.14539,-9.154688 -1.71631,-16.415295 1.1442,-6.787093 7.00831,-10.733088 2.71751,-18.940735 -3.71869,-5.366543 -6.72227,-4.893022 -13.58756,-5.840052 -5.86408,-2.367593 -3.14657,-7.1027814 -9.58276,-8.2076584 -6.8653,-1.894074 -4.71991,3.1567864 -10.29796,3.1567864 z m -1.00118,21.939686 c -2.32361,-3.846548 -8.40338,-3.846548 -10.72699,0 -1.54917,2.564262 -1.54917,5.327715 0,7.891973 2.32361,3.846538 8.40338,3.846538 10.72699,0 1.54927,-2.564258 1.54927,-5.327711 0,-7.891973 z")`,
+    transition: {
+      delay: 0,
+      type: "spring",
+      stiffness: 400,
+      damping: 40,
+    },
+  },
+};
 
 export default function NavBar() {
-  const blobref = useRef<SVGSVGElement>(null);
-  const blobpathref = useRef<SVGPathElement>(null);
-  const hambergerref = useRef<HTMLDivElement>(null);
-  const cord = useRef({ x: 0, y: window.innerHeight / 2 });
-  // let x = 2,
-  //   y = window.innerHeight / 2;
-  // const hambergerref = useRef<HTMLButtonElement>(null);
-  // const [mousepos, setmousepos] = useState({})
-  const [open, setopen] = useState(false);
-  const animatecurve = () => {
-    let values = svgCurve(cord.current.x, cord.current.y, open);
+  // const [isOpen, togglenav] = useCycle(true, false);
+  const [isOpen, togglenav] = useCycle(false, true);
+  const containerRef = useRef(null);
+  const { height } = useDimensions(containerRef);
 
-    if (blobpathref && blobpathref.current)
-      blobpathref.current.setAttribute("d", values.curve);
-
-    if (blobref && blobref.current)
-      blobref.current.setAttribute("width", values.blobwidth);
-    if (hambergerref && hambergerref.current)
-      hambergerref.current.style.transform = values.hambergtransform;
-
-    // window.requestAnimationFrame(animatecurve);
-  };
-  useEffect(() => {
-    document.addEventListener("mousemove", (e) => {
-      cord.current.x = e.pageX;
-      cord.current.y = e.pageY;
-      // window.requestAnimationFrame(animatecurve);
-      animatecurve();
-    });
-    // animatecurve();
-    // return () => {
-    //   cleanup;
-    // };
-  });
-  // useEffect(() => {
-  //   window.requestAnimationFrame(() => {
-  //     let values = svgCurve(cord.current.x, cord.current.y, open);
-
-  //     if (blobpathref && blobpathref.current)
-  //       blobpathref.current.setAttribute("d", values.curve);
-
-  //     if (blobref && blobref.current)
-  //       blobref.current.setAttribute("width", values.blobwidth);
-  //     if (hambergerref && hambergerref.current)
-  //       hambergerref.current.style.transform = values.hambergtransform;
-
-  //     window.requestAnimationFrame(animatecurve);
-  //   });
-  // }, [open]);
   return (
-    <div id="menu" className={open ? "expanded" : ""}>
-      <div
-        className="hamburger"
-        ref={hambergerref}
-        onClick={() => {
-          console.log(open);
-
-          setopen(!open);
-        }}
-      >
-        <div className="line"></div>
-        <div className="line"></div>
-        <div className="line"></div>
-      </div>
-      <div className="menu-inner">
-        <ul>
-          <li>Menu Item</li>
-          <li>Menu Item</li>
-          <li>Menu Item</li>
-          <li>Menu Item</li>
-          <li>Menu Item</li>
-          <li>Menu Item</li>
-        </ul>
-      </div>
-
-      <svg
-        ref={blobref}
-        version="1.1"
-        id="blob"
-        xmlns="http://www.w3.org/2000/svg"
-        xmlnsXlink="http://www.w3.org/1999/xlink"
-      >
-        <path
-          ref={blobpathref}
-          id="blob-path"
-          d="M60,983H0V0h60v-76.5837121932024c0,160,0.29969056167817326,160,0.29969056167817326,200S60,123.4162878067976,60,523.4162878067976V983z"
-        />
-      </svg>
-    </div>
+    <motion.nav
+      className="navbar"
+      animate={isOpen ? "open" : "closed"}
+      custom={height}
+      ref={containerRef}
+      variants={sidebar}
+    >
+      <Menu></Menu>
+      <ToggleNav togglenav={() => togglenav()}></ToggleNav>
+    </motion.nav>
   );
 }

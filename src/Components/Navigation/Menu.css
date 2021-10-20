@@ -1,0 +1,49 @@
+.menu-logo {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.menu-logo svg {
+    fill: var(--opposite-bg);
+    max-width: 6em;
+    max-height: 9em;
+}
+
+.menu-logo svg path:hover {
+    /* fill: var(--analog); */
+    fill: var(--secondary);
+
+}
+
+.menu-logo .logo-name {
+    margin-top: .5em;
+    color: var(--opposite-bg);
+
+}
+
+.menu-logo .logo-name span {
+    font-size: 1.5em;
+    font-family: 'IM Fell English SC';
+    cursor: default;
+}
+
+.menu-logo .logo-name span:hover {
+    color: var(--secondary);
+
+}
+
+.menu-logo .logo-name span.name-letter {
+    /* font-family: 'ScheherazadeNew'; */
+    /* font-family: 'Roboto'; */
+    /* font-weight: bold; */
+    font-family: 'IM Fell English SC';
+}
+
+
+.menu-logo .logo-name span.code {
+    /* font-family: 'Roboto';
+    font-weight: bold; */
+}

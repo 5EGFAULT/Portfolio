@@ -1,0 +1,20 @@
+.menu-item {
+    display: flex;
+    /* justify-content: flex-start; */
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    font-size: 2em;
+    font-family: 'IM Fell English SC';
+    color: var(--opposite-bg);
+}
+
+.menu-item.selected {
+    /* background-color: var(--primary); */
+    color: var(--secondary);
+}
+
+.menu-item:hover {
+    color: var(--analog);
+
+}

@@ -1,3 +1,13 @@
+@font-face {
+  font-family: 'Roboto';
+  src: url(fonts/Roboto-Bold.ttf);
+  font-family: 'ScheherazadeNew';
+  src: url(fonts/ScheherazadeNew-Bold.ttf);
+  font-family: 'IM Fell English SC';
+  src: url(fonts/IMFellEnglishSC-Regular.ttf);
+}
+
+
 *,
 html,
 body {
@@ -6,13 +16,37 @@ body {
   box-sizing: border-box;
 }
 
-body {
-  /* background-color: #212121; */
-}
-
 a,
 a:visited,
 a:hover {
   text-decoration: none;
   color: inherit;
+}
+
+body {
+  background-color: var(--bg--main);
+}
+
+body.light,
+body {
+  --primary: #2D8BE9;
+  --secondary: #E4342E;
+  --complementary: #e98c2e;
+  --analog: #2ee9e9;
+  --bg--main: #F5F5F5;
+  --bg--secondary: #E0E0E0;
+  --theme: #fff;
+  --opposite-bg: #424242;
+}
+
+
+body.dark {
+  --primary: #2D8BE9;
+  --secondary: #E4342E;
+  --complementary: #e98c2e;
+  --analog: #2ee9e9;
+  --bg--main: #424242;
+  --bg--secondary: #757575;
+  --theme: #000;
+  --opposite-bg: #F5F5F5;
 }
